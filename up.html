@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEO USA OS</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+  
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  :root {
+    --bg-dark: #030508;
+    --bg-panel: #080d14;
+    --bg-card: #0c1219;
+    --bg-hover: #111a25;
+    --border: #1a2535;
+    --border-glow: #00d4ff33;
+    --text-primary: #e8f0ff;
+    --text-secondary: #6880a0;
+    --text-muted: #3a4a60;
+    --neon-cyan: #00d4ff;
+    --neon-green: #00ff88;
+    --neon-red: #ff3366;
+    --neon-orange: #ff9900;
+    --neon-purple: #8855ff;
+    --neon-pink: #ff33aa;
+    --glow-cyan: 0 0 20px rgba(0,212,255,0.4);
+    --glow-green: 0 0 20px rgba(0,255,136,0.4);
+    --glow-red: 0 0 20px rgba(255,51,102,0.4);
+  }
+  
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-primary);
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  .app { display: flex; height: 100vh; }
+  
+  /* === SIDEBAR === */
+  .sidebar {
+    width: 360px;
+    background: var(--bg-panel);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+    position: relative;
+  }
+  
+  .sidebar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 1px;
+    height: 100%;
+    background: linear-gradient(180deg, transparent, var(--neon-cyan), transparent);
+    opacity: 0.3;
+  }
+  
+  .header {
+    padding: 20px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(0,212,255,0.05), transparent);
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  
+  .logo-icon {
+    width: 42px;
+    height: 42px;
+    background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    box-shadow: var(--glow-cyan);
+    position: relative;
+  }
+  
+  .logo-icon::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+    z-index: -1;
+    opacity: 0.5;
+    filter: blur(8px);
+  }
+  
+  .logo-text { 
+    font-size: 16px; 
+    font-weight: 700; 
+    letter-spacing: 2px;
+    background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .idea-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(0,212,255,0.05);
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 10px;
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .idea-card:hover {
+    border-color: var(--neon-cyan);
+    box-shadow: var(--glow-cyan);
+    background: rgba(0,212,255,0.1);
+  }
+  
+  .idea-avatar {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--neon-green), var(--neon-cyan));
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    box-shadow: var(--glow-green);
+  }
+  
+  .idea-info { flex: 1; }
+  .idea-title { font-size: 14px; font-weight: 600; }
+  .idea-sub { font-size: 10px; color: var(--text-secondary); margin-top: 2px; }
+  
+  /* Dashboard */
+  .dashboard {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(0,212,255,0.02);
+  }
+  
+  .dashboard-title {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--neon-cyan);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .dashboard-title::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: var(--neon-cyan);
+    border-radius: 2px;
+    box-shadow: var(--glow-cyan);
+  }
+  
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  
+  .dash-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .dash-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+    opacity: 0.5;
+  }
+  
+  .dash-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+  
+  .dash-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 20px;
+    font-weight: 600;
+  }
+  
+  .dash-value.cyan { color: var(--neon-cyan); text-shadow: var(--glow-cyan); }
+  .dash-value.green { color: var(--neon-green); text-shadow: var(--glow-green); }
+  .dash-value.red { color: var(--neon-red); text-shadow: var(--glow-red); }
+  .dash-value.orange { color: var(--neon-orange); }
+  
+  .dash-bar {
+    height: 4px;
+    background: var(--bg-dark);
+    border-radius: 2px;
+    margin-top: 8px;
+    overflow: hidden;
+  }
+  
+  .dash-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.5s ease;
+    position: relative;
+  }
+  
+  .dash-bar-fill.green { 
+    background: linear-gradient(90deg, #005533, var(--neon-green));
+    box-shadow: 0 0 10px var(--neon-green);
+  }
+  .dash-bar-fill.red { 
+    background: linear-gradient(90deg, #550022, var(--neon-red));
+    box-shadow: 0 0 10px var(--neon-red);
+  }
+  .dash-bar-fill.cyan { 
+    background: linear-gradient(90deg, #003355, var(--neon-cyan));
+    box-shadow: 0 0 10px var(--neon-cyan);
+  }
+  
+  .dash-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
+  
+  .dash-row span {
+    font-size: 10px;
+    color: var(--text-muted);
+  }
+  
+  .dash-row .val {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-secondary);
+  }
+  
+  /* Search & Filters */
+  .search-filters {
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .search-input {
+    width: 100%;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px 10px 36px;
+    font-size: 12px;
+    color: var(--text-primary);
+    outline: none;
+    margin-bottom: 10px;
+    transition: all 0.3s;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%233a4a60' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 12px center;
+  }
+  
+  .search-input:focus { 
+    border-color: var(--neon-cyan); 
+    box-shadow: 0 0 15px rgba(0,212,255,0.2);
+  }
+  .search-input::placeholder { color: var(--text-muted); }
+  
+  .filter-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  
+  .filter-btn {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: 9px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .filter-btn:hover { border-color: var(--neon-cyan); color: var(--text-primary); }
+  .filter-btn.active { 
+    background: var(--neon-cyan); 
+    color: var(--bg-dark); 
+    border-color: var(--neon-cyan);
+    font-weight: 600;
+    box-shadow: var(--glow-cyan);
+  }
+  
+  .filter-btn.region { border-color: var(--neon-purple); }
+  .filter-btn.region.active { 
+    background: var(--neon-purple); 
+    border-color: var(--neon-purple);
+    box-shadow: 0 0 15px rgba(136,85,255,0.4);
+  }
+  
+  /* Region List */
+  .section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  
+  .section-hdr {
+    padding: 10px 20px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    background: var(--bg-dark);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .section-hdr .count {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--neon-cyan);
+  }
+  
+  .region-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px 12px;
+  }
+  
+  .region-list::-webkit-scrollbar { width: 4px; }
+  .region-list::-webkit-scrollbar-track { background: transparent; }
+  .region-list::-webkit-scrollbar-thumb { 
+    background: var(--neon-cyan); 
+    border-radius: 2px;
+    opacity: 0.5;
+  }
+  
+  .region-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 4px;
+    border: 1px solid transparent;
+    background: var(--bg-card);
+  }
+  
+  .region-item:hover { 
+    background: var(--bg-hover); 
+    border-color: var(--border);
+  }
+  
+  .region-item.selected { 
+    background: rgba(0,212,255,0.1); 
+    border-color: var(--neon-cyan);
+    box-shadow: var(--glow-cyan);
+  }
+  
+  .region-item.censored { 
+    opacity: 0.5; 
+    border-color: var(--neon-red);
+    background: rgba(255,51,102,0.05);
+  }
+  
+  .region-flag { font-size: 18px; width: 28px; text-align: center; }
+  
+  .region-info { flex: 1; min-width: 0; }
+  .region-name { font-size: 12px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .region-meta { font-size: 9px; color: var(--text-muted); margin-top: 2px; }
+  
+  .region-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 70px;
+    flex-shrink: 0;
+  }
+  
+  .region-bar {
+    height: 5px;
+    background: var(--bg-dark);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  
+  .region-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+  
+  .region-bar-fill.inf { 
+    background: linear-gradient(90deg, #005533, var(--neon-green));
+    box-shadow: 0 0 8px rgba(0,255,136,0.5);
+  }
+  .region-bar-fill.cen { 
+    background: linear-gradient(90deg, #550022, var(--neon-red));
+    box-shadow: 0 0 8px rgba(255,51,102,0.5);
+  }
+  
+  .region-pct { 
+    font-family: 'JetBrains Mono', monospace; 
+    font-size: 11px; 
+    width: 36px; 
+    text-align: right;
+    font-weight: 500;
+  }
+  .region-pct.inf { color: var(--neon-green); }
+  .region-pct.cen { color: var(--neon-red); }
+  
+  /* Transmission */
+  .trans-panel {
+    border-top: 1px solid var(--border);
+    background: var(--bg-dark);
+    padding: 12px 16px;
+  }
+  
+  .trans-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+  }
+  
+  .trans-btn {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 4px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+  }
+  
+  .trans-btn:hover { 
+    border-color: var(--neon-cyan);
+    box-shadow: var(--glow-cyan);
+  }
+  
+  .trans-btn.active { 
+    border-color: var(--neon-cyan); 
+    background: rgba(0,212,255,0.1);
+    box-shadow: var(--glow-cyan);
+  }
+  
+  .trans-btn.disabled { opacity: 0.3; cursor: not-allowed; }
+  .trans-icon { font-size: 16px; }
+  .trans-name { font-size: 8px; margin-top: 3px; color: var(--text-secondary); }
+  .trans-cost { 
+    font-family: 'JetBrains Mono', monospace; 
+    font-size: 9px; 
+    color: var(--neon-cyan);
+    margin-top: 2px;
+  }
+  
+  /* Actions */
+  .actions {
+    padding: 14px 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+  }
+  
+  .btn {
+    flex: 1;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent, rgba(255,255,255,0.1), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.3s;
+  }
+  
+  .btn:hover::before { transform: translateX(100%); }
+  
+  .btn-primary {
+    background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+    color: white;
+    box-shadow: var(--glow-cyan);
+  }
+  .btn-primary:hover { 
+    box-shadow: 0 0 30px rgba(0,212,255,0.5);
+    transform: translateY(-1px);
+  }
+  .btn-primary:disabled { 
+    background: var(--bg-card); 
+    color: var(--text-muted); 
+    cursor: not-allowed; 
+    box-shadow: none;
+    transform: none;
+  }
+  
+  .btn-danger { 
+    background: linear-gradient(135deg, var(--neon-red), var(--neon-pink));
+    color: white;
+    box-shadow: var(--glow-red);
+  }
+  .btn-danger:hover { 
+    box-shadow: 0 0 30px rgba(255,51,102,0.5);
+    transform: translateY(-1px);
+  }
+  
+  /* === MAP AREA === */
+  .map-area {
+    flex: 1;
+    position: relative;
+    background: var(--bg-dark);
+    overflow: hidden;
+  }
+  
+  .map-bg {
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(circle at 20% 30%, rgba(0,212,255,0.08) 0%, transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(136,85,255,0.08) 0%, transparent 40%),
+      radial-gradient(circle at 50% 50%, rgba(0,255,136,0.03) 0%, transparent 50%);
+  }
+  
+  .map-svg {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+  
+  /* Country paths */
+  .country-path {
+    fill: var(--bg-card);
+    stroke: var(--border);
+    stroke-width: 0.3;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .country-path:hover {
+    fill: var(--bg-hover);
+    stroke: var(--neon-cyan);
+    stroke-width: 0.8;
+    filter: drop-shadow(0 0 6px rgba(0,212,255,0.5));
+  }
+  
+  .country-path.selected {
+    stroke: var(--neon-cyan);
+    stroke-width: 1.2;
+    filter: drop-shadow(0 0 12px rgba(0,212,255,0.7));
+  }
+  
+  .country-path.censored {
+    fill: rgba(255,51,102,0.2);
+    stroke: var(--neon-red);
+  }
+  
+  .country-path.inf-1 { fill: #0a2030; }
+  .country-path.inf-2 { fill: #0a3545; }
+  .country-path.inf-3 { fill: #006644; }
+  .country-path.inf-4 { fill: #009966; }
+  .country-path.inf-5 { fill: var(--neon-green); filter: drop-shadow(0 0 4px rgba(0,255,136,0.5)); }
+  
+  /* Routes */
+  .route {
+    fill: none;
+    stroke: url(#routeGrad);
+    stroke-width: 2;
+    stroke-linecap: round;
+    opacity: 0;
+  }
+  
+  .route.active {
+    opacity: 1;
+    stroke-dasharray: 8 4;
+    animation: flow 0.8s linear infinite;
+    filter: drop-shadow(0 0 4px rgba(0,212,255,0.6));
+  }
+  
+  @keyframes flow { to { stroke-dashoffset: -12; } }
+  
+  /* Map overlays */
+  .map-info {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    display: flex;
+    gap: 10px;
+  }
+  
+  .info-badge {
+    background: rgba(8,13,20,0.9);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+  
+  .info-badge .label { color: var(--text-muted); }
+  .info-badge .val { 
+    font-family: 'JetBrains Mono', monospace; 
+    font-weight: 600;
+  }
+  .info-badge .val.green { color: var(--neon-green); text-shadow: var(--glow-green); }
+  .info-badge .val.red { color: var(--neon-red); text-shadow: var(--glow-red); }
+  .info-badge .val.cyan { color: var(--neon-cyan); text-shadow: var(--glow-cyan); }
+  
+  .map-controls {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  
+  .map-btn {
+    width: 36px;
+    height: 36px;
+    background: rgba(8,13,20,0.9);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    backdrop-filter: blur(12px);
+    transition: all 0.2s;
+    color: var(--text-secondary);
+  }
+  
+  .map-btn:hover { 
+    border-color: var(--neon-cyan); 
+    color: var(--neon-cyan);
+    box-shadow: var(--glow-cyan);
+  }
+  
+  .legend {
+    position: absolute;
+    bottom: 60px;
+    left: 16px;
+    background: rgba(8,13,20,0.95);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 10px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+  
+  .legend-title { 
+    font-weight: 600; 
+    margin-bottom: 10px; 
+    color: var(--neon-cyan);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 9px;
+  }
+  
+  .legend-item { 
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
+    margin-bottom: 6px;
+    color: var(--text-secondary);
+  }
+  
+  .legend-color { 
+    width: 14px; 
+    height: 14px; 
+    border-radius: 3px;
+    border: 1px solid var(--border);
+  }
+  
+  .news-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(180deg, transparent, rgba(8,13,20,0.95));
+    padding: 30px 16px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .news-label {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--neon-red);
+    background: rgba(255,51,102,0.15);
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid rgba(255,51,102,0.3);
+  }
+  
+  .news-text {
+    flex: 1;
+    font-size: 11px;
+    color: var(--text-secondary);
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  
+  .news-scroll {
+    display: inline-block;
+    animation: scroll 30s linear infinite;
+  }
+  
+  @keyframes scroll {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+  }
+  
+  /* Tooltip */
+  .tooltip {
+    position: fixed;
+    background: rgba(12,18,25,0.95);
+    border: 1px solid var(--neon-cyan);
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 11px;
+    pointer-events: none;
+    z-index: 1000;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.5), var(--glow-cyan);
+    min-width: 160px;
+    display: none;
+    backdrop-filter: blur(12px);
+  }
+  
+  .tooltip-title { 
+    font-weight: 600; 
+    margin-bottom: 8px; 
+    padding-bottom: 8px; 
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .tooltip-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
+  .tooltip-label { color: var(--text-muted); }
+  .tooltip-value { font-family: 'JetBrains Mono', monospace; font-weight: 500; }
+  .tooltip-value.green { color: var(--neon-green); }
+  .tooltip-value.red { color: var(--neon-red); }
+  .tooltip-value.cyan { color: var(--neon-cyan); }
+  
+  .tooltip-status {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+    font-size: 9px;
+    color: var(--text-muted);
+  }
+  
+  /* Game Over */
+  .game-over {
+    position: fixed;
+    inset: 0;
+    background: rgba(3,5,8,0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    backdrop-filter: blur(10px);
+  }
+  
+  .go-card {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 40px;
+    text-align: center;
+    max-width: 400px;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+    position: relative;
+  }
+  
+  .go-card::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 17px;
+    background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+    z-index: -1;
+    opacity: 0.3;
+    filter: blur(1px);
+  }
+  
+  .go-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    margin: 0 auto 20px;
+  }
+  
+  .go-icon.victory { 
+    background: rgba(0,255,136,0.15); 
+    border: 2px solid var(--neon-green);
+    box-shadow: var(--glow-green);
+  }
+  .go-icon.defeat { 
+    background: rgba(255,51,102,0.15); 
+    border: 2px solid var(--neon-red);
+    box-shadow: var(--glow-red);
+  }
+  
+  .go-title { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+  .go-title.victory { color: var(--neon-green); text-shadow: var(--glow-green); }
+  .go-title.defeat { color: var(--neon-red); text-shadow: var(--glow-red); }
+  .go-text { font-size: 13px; color: var(--text-secondary); margin-bottom: 24px; }
+  
+  .go-stats {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 24px;
+    padding: 16px;
+    background: var(--bg-dark);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  
+  .go-stat { text-align: center; }
+  .go-stat .label { font-size: 9px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; }
+  .go-stat .val { 
+    font-family: 'JetBrains Mono', monospace; 
+    font-size: 22px; 
+    color: var(--neon-cyan);
+    text-shadow: var(--glow-cyan);
+  }
+  
+  .btn-restart {
+    background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+    color: white;
+    padding: 14px 36px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s;
+    box-shadow: var(--glow-cyan);
+  }
+  
+  .btn-restart:hover { 
+    box-shadow: 0 0 40px rgba(0,212,255,0.5);
+    transform: translateY(-2px);
+  }
+  
+  .hidden { display: none !important; }
+  
+  /* Animations */
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+  
+  .pulse { animation: pulse 2s ease-in-out infinite; }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="sidebar">
+    <div class="header">
+      <div class="logo">
+        <div class="logo-icon">⚡</div>
+        <div class="logo-text">NEO USA OS</div>
+      </div>
+      <div class="idea-card" onclick="cycleIdea()">
+        <div class="idea-avatar" id="ideaIcon">🗽</div>
+        <div class="idea-info">
+          <div class="idea-title" id="ideaName">Neo-Americanism</div>
+          <div class="idea-sub" id="ideaType">Political Operating System</div>
+        </div>
+        <div style="color:var(--neon-cyan);font-size:14px;">↻</div>
+      </div>
+    </div>
+    
+    <div class="dashboard">
+      <div class="dashboard-title">System Monitor</div>
+      <div class="dashboard-grid">
+        <div class="dash-card">
+          <div class="dash-label">Global Influence</div>
+          <div class="dash-value green" id="statInf">0.0%</div>
+          <div class="dash-bar"><div class="dash-bar-fill green" id="infBar" style="width: 0%"></div></div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-label">Censorship</div>
+          <div class="dash-value red" id="statCen">0%</div>
+          <div class="dash-bar"><div class="dash-bar-fill red" id="cenBar" style="width: 0%"></div></div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-label">Idea Points</div>
+          <div class="dash-value cyan" id="statPts">20</div>
+          <div class="dash-bar"><div class="dash-bar-fill cyan" id="ptsBar" style="width: 50%"></div></div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-label">Turn</div>
+          <div class="dash-value orange" id="statTurn">1</div>
+        </div>
+      </div>
+      <div class="dash-row">
+        <span>Infected: <span class="val" id="dashInf">0</span>/195</span>
+        <span>Censored: <span class="val" id="dashCen">0</span></span>
+        <span>Free: <span class="val" id="dashFree">195</span></span>
+      </div>
+    </div>
+    
+    <div class="search-filters">
+      <input type="text" class="search-input" placeholder="Search countries..." id="searchInput" oninput="renderList()">
+      <div class="filter-row">
+        <div class="filter-btn active" onclick="setFilter('all')">All</div>
+        <div class="filter-btn" onclick="setFilter('infected')">Infected</div>
+        <div class="filter-btn" onclick="setFilter('censored')">Censored</div>
+        <div class="filter-btn" onclick="setFilter('clean')">Clean</div>
+        <div class="filter-btn region" onclick="setFilter('NA')">NA</div>
+        <div class="filter-btn region" onclick="setFilter('SA')">SA</div>
+        <div class="filter-btn region" onclick="setFilter('EU')">EU</div>
+        <div class="filter-btn region" onclick="setFilter('AF')">AF</div>
+        <div class="filter-btn region" onclick="setFilter('AS')">AS</div>
+        <div class="filter-btn region" onclick="setFilter('OC')">OC</div>
+      </div>
+    </div>
+    
+    <div class="section">
+      <div class="section-hdr">
+        <span>Countries & Territories</span>
+        <span class="count" id="listCount">0/195</span>
+      </div>
+      <div class="region-list" id="regionList"></div>
+    </div>
+    
+    <div class="trans-panel">
+      <div class="trans-grid" id="transGrid"></div>
+    </div>
+    
+    <div class="actions">
+      <button class="btn btn-primary" id="spreadBtn" disabled>Spread Idea</button>
+      <button class="btn btn-danger" id="nextTurnBtn">Next Turn →</button>
+    </div>
+  </div>
+  
+  <div class="map-area">
+    <div class="map-bg"></div>
+    
+    <div class="map-info">
+      <div class="info-badge"><span class="label">Infected</span><span class="val green" id="mapInf">0</span><span class="label">/ 195</span></div>
+      <div class="info-badge"><span class="label">Censored</span><span class="val red" id="mapCen">0</span></div>
+      <div class="info-badge"><span class="label">Routes</span><span class="val cyan" id="mapRte">0</span></div>
+    </div>
+    
+    <div class="map-controls">
+      <div class="map-btn" onclick="zoom(1.2)">+</div>
+      <div class="map-btn" onclick="zoom(0.8)">−</div>
+      <div class="map-btn" onclick="resetView()">⊙</div>
+    </div>
+    
+    <div class="legend">
+      <div class="legend-title">Influence Level</div>
+      <div class="legend-item"><div class="legend-color" style="background:#0c1219"></div><span>None</span></div>
+      <div class="legend-item"><div class="legend-color" style="background:#0a2030"></div><span>Low (1-20%)</span></div>
+      <div class="legend-item"><div class="legend-color" style="background:#0a3545"></div><span>Medium (21-40%)</span></div>
+      <div class="legend-item"><div class="legend-color" style="background:#006644"></div><span>High (41-60%)</span></div>
+      <div class="legend-item"><div class="legend-color" style="background:#009966"></div><span>Very High (61-80%)</span></div>
+      <div class="legend-item"><div class="legend-color" style="background:#00ff88; box-shadow: 0 0 8px #00ff88"></div><span>Dominant (81-100%)</span></div>
+      <div class="legend-item"><div class="legend-color" style="background:rgba(255,51,102,0.3); border-color: #ff3366"></div><span>Censored</span></div>
+    </div>
+    
+    <svg class="map-svg" id="mapSvg" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <radialGradient id="oceanGrad" cx="50%" cy="50%" r="70%">
+          <stop offset="0%" style="stop-color:#0a1525"/>
+          <stop offset="100%" style="stop-color:#030508"/>
+        </radialGradient>
+        <linearGradient id="routeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:0"/>
+          <stop offset="50%" style="stop-color:#00d4ff;stop-opacity:1"/>
+          <stop offset="100%" style="stop-color:#8855ff;stop-opacity:0"/>
+        </linearGradient>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="2" result="blur"/>
+          <feMerge>
+            <feMergeNode in="blur"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
+      </defs>
+      
+      <rect x="0" y="0" width="1000" height="500" fill="url(#oceanGrad)"/>
+      
+      <g id="graticule" opacity="0.1" stroke="#00d4ff" stroke-width="0.2" fill="none">
+        <line x1="0" y1="250" x2="1000" y2="250"/>
+        <line x1="0" y1="125" x2="1000" y2="125"/>
+        <line x1="0" y1="375" x2="1000" y2="375"/>
+        <line x1="500" y1="0" x2="500" y2="500"/>
+        <line x1="250" y1="0" x2="250" y2="500"/>
+        <line x1="750" y1="0" x2="750" y2="500"/>
+      </g>
+      
+      <g id="countriesGroup"></g>
+      <g id="routesGroup"></g>
+    </svg>
+    
+    <div class="news-bar">
+      <div class="news-label pulse">● LIVE</div>
+      <div class="news-text"><span class="news-scroll" id="newsScroll">Initializing global monitoring systems...</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<div class="game-over hidden" id="gameOver">
+  <div class="go-card">
+    <div class="go-icon" id="goIcon">🏆</div>
+    <div class="go-title" id="goTitle">VICTORY</div>
+    <div class="go-text" id="goText"></div>
+    <div class="go-stats">
+      <div class="go-stat"><div class="label">Turns</div><div class="val" id="goTurns">1</div></div>
+      <div class="go-stat"><div class="label">Influence</div><div class="val" id="goInfluence">0%</div></div>
+      <div class="go-stat"><div class="label">Countries</div><div class="val" id="goCountries">0</div></div>
+    </div>
+    <button class="btn-restart" onclick="restartGame()">Play Again</button>
+  </div>
+</div>
+
+<script>
+const IDEAS = [
+  { name: 'Democracy', icon: '🏛️', type: 'Political Ideology' },
+  { name: 'Capitalism', icon: '💰', type: 'Economic System' },
+  { name: 'Socialism', icon: '✊', type: 'Political Movement' },
+  { name: 'Environmentalism', icon: '🌿', type: 'Global Movement' },
+  { name: 'Technocracy', icon: '🤖', type: 'Governance Model' },
+  { name: 'Nationalism', icon: '🏴', type: 'Political Identity' },
+  { name: 'Neo-Americanism', icon: '🗽', type: 'Political Operating System', desc: 'American exceptionalism reimagined for the digital age' }
+];
+
+const TRANSMISSIONS = [
+  { id: 'social', name: 'Social', icon: '📱', cost: 3, base: 12, cw: 0.7 },
+  { id: 'word', name: 'Word', icon: '🗣️', cost: 2, base: 7, cw: 1.3 },
+  { id: 'protest', name: 'Protest', icon: '✊', cost: 5, base: 18, cw: 0.4 },
+  { id: 'media', name: 'Media', icon: '📰', cost: 4, base: 14, cw: 0.6 },
+  { id: 'art', name: 'Art', icon: '🎨', cost: 3, base: 10, cw: 1.1 }
+];
+
+const MAP_PATHS = {
+  US:"M130,155 L135,145 L145,140 L160,138 L175,140 L190,145 L200,155 L205,170 L200,185 L195,195 L185,200 L170,205 L155,200 L140,195 L130,180 Z",CA:"M120,85 L130,80 L150,75 L170,72 L185,75 L200,80 L210,90 L215,105 L210,120 L200,130 L185,135 L170,138 L155,140 L140,138 L125,130 L118,115 L115,100 Z",MX:"M120,205 L135,200 L150,205 L160,215 L165,230 L160,245 L150,255 L140,260 L130,258 L120,250 L115,235 L112,220 Z",
+  GT:"M135,262 L142,260 L148,265 L150,272 L145,278 L138,275 L132,270 Z",HN:"M148,268 L155,265 L162,270 L165,278 L158,285 L150,282 L145,275 Z",SV:"M138,278 L145,275 L150,280 L152,288 L145,292 L138,288 Z",
+  NI:"M155,285 L162,282 L168,288 L170,298 L165,305 L158,300 L152,292 Z",CR:"M162,305 L168,302 L175,308 L178,318 L172,325 L165,320 L160,312 Z",PA:"M175,325 L182,320 L190,325 L195,335 L188,342 L180,338 L172,332 Z",
+  CU:"M195,250 L205,245 L215,248 L218,258 L212,265 L202,268 L192,262 L190,255 Z",JM:"M210,265 L218,262 L225,268 L222,275 L215,278 L208,272 Z",HT:"M222,258 L230,255 L235,262 L232,270 L225,272 L218,268 Z",DO:"M228,262 L235,258 L242,265 L240,275 L232,278 L225,272 Z",
+  CO:"M190,335 L200,328 L215,330 L225,340 L228,355 L220,368 L208,375 L195,370 L185,358 L182,345 Z",VE:"M225,320 L238,315 L250,320 L255,335 L248,348 L235,352 L222,345 L218,332 Z",GY:"M250,328 L260,325 L268,332 L265,342 L258,348 L248,342 Z",SR:"M262,330 L270,328 L275,335 L272,345 L265,348 L258,342 Z",
+  EC:"M178,365 L188,360 L198,365 L200,378 L192,388 L182,385 L175,375 Z",PE:"M185,385 L198,378 L210,382 L218,400 L210,418 L198,425 L185,420 L178,405 L175,392 Z",BR:"M230,355 L248,348 L265,355 L278,370 L285,395 L278,425 L265,445 L248,455 L232,448 L220,430 L215,405 L218,380 L225,365 Z",
+  BO:"M210,420 L225,415 L238,425 L242,445 L235,458 L222,462 L210,455 L205,438 Z",PY:"M238,448 L252,445 L262,455 L258,468 L248,475 L235,470 L230,458 Z",CL:"M205,462 L215,458 L222,465 L225,485 L220,500 L212,508 L205,502 L200,485 L198,472 Z",
+  AR:"M215,465 L230,460 L245,468 L252,488 L248,505 L235,515 L220,510 L210,495 L208,478 Z",UY:"M250,478 L260,475 L268,482 L265,492 L258,498 L248,492 Z",
+  IS:"M340,65 L355,60 L370,65 L375,78 L368,88 L352,92 L338,85 L335,75 Z",NO:"M395,55 L405,50 L415,52 L420,62 L418,78 L410,88 L402,92 L395,85 L392,72 Z",SE:"M418,55 L428,52 L435,58 L438,72 L435,85 L428,92 L420,88 L415,75 L415,62 Z",
+  FI:"M445,52 L458,48 L468,55 L472,72 L468,85 L458,92 L448,88 L442,75 L442,62 Z",DK:"M408,95 L418,92 L425,98 L422,108 L415,112 L408,108 Z",EE:"M455,85 L465,82 L472,88 L470,98 L462,102 L455,98 Z",
+  LV:"M460,100 L470,98 L478,105 L475,115 L468,118 L460,112 Z",LT:"M465,115 L475,112 L482,118 L480,128 L472,132 L465,125 Z",PL:"M438,110 L452,105 L465,108 L472,120 L468,132 L455,138 L442,135 L435,125 Z",
+  DE:"M415,115 L428,110 L442,115 L448,128 L445,140 L432,148 L418,145 L410,132 Z",NL:"M408,108 L418,105 L425,112 L422,122 L415,128 L408,122 Z",BE:"M405,122 L415,118 L422,125 L418,135 L410,138 L402,132 Z",
+  FR:"M392,128 L405,122 L418,125 L425,138 L422,152 L410,162 L395,158 L385,148 L382,138 Z",CH:"M418,140 L428,138 L435,145 L432,155 L425,158 L418,152 Z",AT:"M432,138 L445,135 L455,142 L452,155 L442,160 L432,152 Z",
+  GB:"M382,100 L392,95 L398,102 L400,118 L395,128 L385,132 L378,125 L375,112 Z",IE:"M370,98 L380,95 L385,105 L382,118 L375,122 L368,115 Z",PT:"M375,148 L382,145 L388,152 L385,165 L378,170 L372,162 Z",
+  ES:"M382,152 L395,148 L408,152 L418,165 L415,178 L402,185 L388,182 L378,172 L375,160 Z",IT:"M428,148 L438,145 L448,152 L452,168 L448,182 L438,190 L428,185 L422,172 L422,158 Z",GR:"M448,158 L458,155 L465,162 L468,178 L462,190 L452,195 L445,188 L442,172 Z",
+  BG:"M462,142 L472,138 L480,145 L478,158 L470,165 L462,158 Z",RO:"M468,132 L478,128 L488,135 L492,150 L485,162 L475,168 L465,160 L462,145 Z",HU:"M445,135 L458,132 L468,138 L470,152 L462,160 L450,158 L442,148 Z",
+  CZ:"M435,125 L448,122 L458,128 L460,140 L452,148 L440,145 L432,135 Z",SK:"M448,122 L460,118 L470,125 L472,138 L465,145 L452,142 L445,132 Z",SI:"M432,142 L442,138 L450,145 L448,155 L440,160 L432,152 Z",
+  HR:"M438,148 L448,145 L458,152 L460,168 L452,178 L442,172 L435,160 Z",BA:"M445,158 L455,155 L462,162 L460,175 L452,180 L445,172 Z",RS:"M455,152 L465,148 L475,155 L478,170 L470,180 L460,175 L452,165 Z",
+  ME:"M448,172 L458,168 L465,175 L462,185 L455,188 L448,182 Z",MK:"M458,168 L468,165 L475,172 L472,182 L465,188 L458,180 Z",AL:"M452,175 L462,172 L468,180 L465,192 L458,198 L450,190 Z",
+  UA:"M475,118 L490,112 L505,118 L512,135 L508,152 L495,162 L480,158 L470,145 L468,128 Z",BY:"M472,108 L485,105 L495,112 L498,128 L490,138 L478,135 L470,125 Z",MD:"M478,132 L488,128 L495,135 L492,148 L485,155 L478,148 Z",
+  RU:"M495,45 L520,38 L560,35 L600,40 L640,50 L680,65 L720,80 L750,100 L760,125 L750,150 L720,168 L680,178 L640,180 L600,175 L560,165 L520,150 L500,135 L490,118 L488,95 L490,72 Z",
+  MA:"M385,185 L400,180 L415,185 L420,200 L412,212 L398,218 L385,212 L378,198 Z",DZ:"M412,188 L430,182 L448,188 L455,208 L448,225 L430,232 L412,225 L405,208 Z",TN:"M435,178 L448,175 L455,182 L452,195 L445,200 L435,195 Z",
+  LY:"M455,190 L472,185 L488,192 L495,215 L488,235 L470,242 L455,235 L448,215 Z",EG:"M488,195 L502,190 L515,198 L520,218 L515,238 L500,245 L488,238 L482,218 Z",MR:"M382,220 L398,215 L412,222 L415,242 L405,255 L390,258 L378,248 L375,232 Z",
+  ML:"M402,235 L418,228 L435,235 L440,258 L430,272 L415,278 L402,268 L395,248 Z",NE:"M435,235 L452,228 L468,235 L475,258 L465,275 L448,282 L435,272 L428,252 Z",TD:"M462,242 L478,235 L495,242 L500,268 L490,285 L475,290 L462,280 L455,258 Z",
+  SD:"M495,235 L512,228 L528,238 L535,262 L525,280 L508,288 L495,278 L488,255 Z",SS:"M505,268 L520,262 L535,270 L540,295 L530,312 L515,318 L505,308 L498,285 Z",ET:"M530,265 L548,258 L562,268 L568,292 L558,310 L542,318 L530,308 L522,285 Z",
+  SO:"M558,275 L575,268 L588,280 L592,305 L582,325 L568,332 L555,322 L548,298 Z",DJ:"M555,272 L565,268 L572,275 L570,285 L562,288 L555,282 Z",ER:"M538,258 L550,252 L560,260 L558,275 L548,282 L538,275 Z",
+  GN:"M372,258 L385,252 L398,258 L402,275 L392,288 L378,292 L368,282 L365,268 Z",SN:"M362,248 L375,242 L388,248 L392,265 L382,278 L368,282 L358,272 L355,258 Z",GM:"M358,252 L368,248 L375,255 L372,265 L365,268 L358,262 Z",
+  GW:"M365,255 L375,252 L382,258 L378,270 L370,275 L362,268 Z",SL:"M370,268 L380,262 L390,268 L388,282 L378,290 L368,285 Z",LR:"M375,278 L385,272 L395,278 L392,292 L382,298 L372,292 Z",
+  CI:"M388,268 L400,262 L412,268 L418,288 L408,302 L395,308 L385,298 L382,278 Z",GH:"M402,272 L415,265 L428,272 L432,292 L422,308 L408,312 L398,302 L395,282 Z",BF:"M402,252 L418,245 L435,252 L440,275 L430,290 L415,295 L402,285 L395,265 Z",
+  TG:"M415,282 L425,278 L432,285 L430,298 L422,305 L415,298 Z",BJ:"M422,278 L432,272 L440,278 L438,295 L430,305 L422,298 Z",NG:"M435,272 L452,265 L468,272 L475,295 L465,312 L448,318 L435,308 L428,288 Z",
+  CM:"M458,272 L475,265 L490,275 L495,300 L485,318 L468,325 L455,315 L448,292 Z",CF:"M478,268 L495,262 L510,272 L515,298 L505,318 L490,325 L478,315 L470,288 Z",GQ:"M452,298 L462,292 L470,298 L468,312 L460,318 L452,310 Z",
+  GA:"M448,305 L460,298 L470,305 L472,322 L462,332 L450,328 Z",CG:"M460,308 L475,302 L488,310 L492,335 L482,350 L468,355 L455,345 L448,325 Z",CD:"M485,305 L505,298 L525,308 L535,340 L525,368 L508,382 L490,375 L478,352 L475,325 Z",
+  UG:"M518,285 L532,278 L545,285 L548,305 L540,318 L525,322 L515,312 L512,295 Z",KE:"M538,288 L552,282 L565,290 L570,315 L560,332 L545,338 L535,328 L530,305 Z",RW:"M522,298 L532,295 L540,302 L538,315 L530,320 L522,312 Z",
+  BI:"M520,308 L530,305 L538,312 L535,325 L528,330 L520,322 Z",TZ:"M535,315 L550,308 L565,318 L570,342 L558,358 L542,365 L530,355 L525,332 Z",AO:"M462,345 L480,338 L498,348 L505,375 L495,398 L478,408 L462,398 L452,375 Z",
+  ZM:"M498,350 L515,342 L532,352 L538,378 L528,398 L512,405 L498,395 L490,372 Z",MW:"M525,348 L538,342 L548,350 L550,372 L542,388 L530,392 L522,378 L520,358 Z",MZ:"M538,352 L555,345 L570,355 L575,385 L565,408 L548,415 L535,405 L528,378 Z",
+  ZW:"M518,368 L535,362 L548,370 L552,395 L542,412 L528,418 L515,408 L508,385 Z",BW:"M505,385 L520,378 L535,388 L540,412 L530,428 L515,435 L502,425 L495,402 Z",NA:"M478,388 L495,382 L510,392 L515,418 L505,438 L490,445 L478,435 L470,412 Z",
+  ZA:"M500,428 L520,422 L540,432 L548,462 L538,485 L518,495 L498,488 L488,465 L488,442 Z",SZ:"M525,418 L535,415 L542,422 L540,435 L532,440 L525,432 Z",LS:"M515,442 L525,438 L532,445 L530,458 L522,465 L515,458 Z",
+  MG:"M558,355 L575,348 L588,358 L592,388 L582,412 L568,418 L555,408 L548,378 Z",KM:"M545,332 L555,328 L562,335 L560,348 L552,352 L545,345 Z",MU:"M568,368 L578,365 L585,372 L582,385 L575,390 L568,382 Z",SC:"M558,318 L568,315 L575,322 L572,335 L565,340 L558,332 Z",
+  TR:"M488,152 L508,145 L528,152 L535,172 L528,192 L510,198 L492,192 L482,172 Z",SY:"M508,172 L522,168 L535,175 L538,195 L528,208 L515,212 L505,205 L500,185 Z",IQ:"M525,178 L542,172 L558,180 L565,202 L555,218 L538,225 L525,218 L518,198 Z",
+  IR:"M548,175 L572,168 L595,178 L605,205 L595,232 L572,242 L548,235 L538,208 Z",SA:"M520,218 L542,212 L565,220 L575,248 L565,275 L542,285 L520,275 L510,248 Z",YE:"M538,248 L555,242 L570,250 L575,272 L565,292 L548,298 L535,290 L528,268 Z",
+  OM:"M568,232 L582,225 L595,235 L600,258 L590,275 L575,280 L565,268 L562,248 Z",AE:"M562,225 L575,220 L585,228 L588,248 L580,260 L568,265 L558,255 L558,238 Z",QA:"M558,222 L568,218 L575,225 L572,238 L565,242 L558,235 Z",
+  BH:"M555,218 L562,215 L568,222 L565,232 L558,235 L552,228 Z",KW:"M548,212 L558,208 L565,215 L562,228 L555,232 L548,225 Z",JO:"M505,195 L518,190 L528,198 L530,215 L522,225 L510,228 L502,218 L500,205 Z",
+  LB:"M500,178 L510,175 L518,182 L515,198 L508,205 L500,198 Z",IL:"M498,188 L508,185 L515,192 L512,212 L505,218 L498,210 Z",PS:"M502,198 L512,195 L518,202 L515,218 L508,225 L502,218 Z",
+  KZ:"M580,128 L610,120 L645,128 L660,152 L648,175 L618,185 L588,178 L570,155 Z",UZ:"M578,155 L600,148 L620,155 L628,178 L618,195 L598,200 L578,192 L568,172 Z",TM:"M562,168 L582,162 L600,170 L608,195 L598,212 L578,218 L562,208 L552,188 Z",
+  KG:"M618,152 L635,148 L648,155 L652,175 L642,188 L628,192 L615,182 L610,165 Z",TJ:"M612,168 L630,162 L645,170 L650,192 L640,208 L622,215 L608,205 L602,185 Z",AF:"M590,188 L612,182 L632,192 L640,218 L628,238 L608,245 L590,235 L582,212 Z",
+  PK:"M585,208 L608,200 L628,210 L638,238 L628,262 L608,272 L588,262 L578,235 Z",IN:"M608,218 L638,208 L668,222 L685,258 L678,298 L652,328 L622,338 L598,322 L585,288 L582,252 Z",NP:"M625,208 L642,202 L655,210 L658,228 L648,240 L632,245 L620,235 L618,218 Z",
+  BT:"M638,215 L648,212 L655,218 L652,232 L645,238 L638,232 Z",BD:"M648,228 L662,222 L675,230 L678,252 L668,268 L655,272 L645,262 L642,242 Z",LK:"M628,278 L640,272 L650,280 L652,302 L642,315 L630,318 L622,308 L620,292 Z",
+  MV:"M615,298 L625,295 L632,302 L628,318 L620,322 L612,315 Z",CN:"M650,168 L690,155 L735,165 L760,195 L755,235 L728,268 L690,282 L652,275 L628,252 L618,218 L628,188 Z",MN:"M668,138 L698,130 L728,138 L742,158 L732,178 L702,185 L675,178 L658,162 Z",
+  KP:"M718,158 L732,155 L742,162 L745,178 L738,192 L725,195 L715,188 L712,172 Z",KR:"M725,178 L738,172 L748,180 L750,198 L742,212 L730,218 L722,208 L720,192 Z",JP:"M758,165 L772,158 L785,165 L790,188 L782,208 L768,218 L755,212 L748,192 L750,175 Z",
+
+  MM:"M648,225 L665,218 L680,228 L685,255 L675,275 L658,282 L645,272 L640,248 Z",TH:"M658,248 L675,242 L690,250 L695,275 L685,295 L668,302 L655,292 L650,268 Z",VN:"M678,235 L695,228 L710,238 L715,268 L705,292 L688,302 L675,292 L668,262 Z",
+  LA:"M668,238 L682,232 L695,240 L698,262 L690,278 L675,282 L665,272 L662,252 Z",KH:"M675,262 L690,255 L702,265 L705,288 L695,302 L680,308 L670,298 L665,275 Z",MY:"M665,282 L680,275 L695,285 L700,308 L690,325 L675,330 L662,320 L655,298 Z",
+  SG:"M672,312 L680,308 L688,315 L685,328 L678,332 L670,325 Z",ID:"M675,325 L700,318 L730,328 L755,355 L745,385 L715,398 L685,392 L662,368 L658,342 Z",PH:"M718,258 L735,252 L748,262 L752,292 L742,315 L725,325 L712,315 L708,285 Z",
+  BN:"M688,295 L698,290 L708,298 L710,315 L702,325 L690,322 L685,308 Z",TL:"M700,322 L712,318 L720,325 L718,342 L710,348 L700,342 Z",AU:"M720,368 L765,355 L810,368 L835,405 L825,448 L788,468 L745,462 L718,438 L708,405 Z",
+  NZ:"M818,418 L832,412 L842,420 L845,445 L838,462 L825,468 L815,458 L810,435 Z",PG:"M768,318 L788,312 L808,322 L815,348 L805,368 L785,375 L765,365 L758,342 Z",FJ:"M855,372 L868,368 L878,375 L880,395 L872,408 L860,412 L850,402 L848,385 Z",
+  SB:"M828,338 L842,332 L855,340 L858,362 L848,378 L835,382 L825,372 L822,352 Z",VU:"M845,355 L858,348 L868,358 L870,378 L862,392 L848,398 L840,388 L838,368 Z",WS:"M878,355 L890,350 L898,358 L900,375 L892,385 L880,388 L872,378 L872,362 Z",
+  TO:"M888,372 L898,368 L905,375 L908,392 L900,402 L890,405 L882,395 L882,378 Z",KI:"M870,305 L885,298 L898,308 L902,328 L892,345 L878,350 L865,340 L862,318 Z",MH:"M848,275 L862,268 L875,278 L878,298 L868,315 L855,320 L845,310 L842,288 Z",
+  FM:"M828,268 L842,262 L855,270 L858,292 L848,308 L835,315 L825,305 L822,282 Z",PW:"M808,272 L820,265 L832,275 L835,295 L825,310 L812,315 L805,305 L802,285 Z",NR:"M862,312 L875,308 L885,315 L882,332 L875,340 L862,338 L855,328 Z"
+};
+
+const NEWS = [
+  "Neural networks detecting ideological propagation patterns",
+  "Global bandwidth capacity adapting to information surge",
+  "Decentralized nodes establishing new transmission pathways",
+  "Quantum encryption protocols activated in target regions",
+  "AI-driven censorship algorithms deployed across borders",
+  "Digital consciousness expanding through network effects",
+  "Silicon Valley servers processing unprecedented data flows",
+  "Open source movements bypassing traditional gatekeepers"
+];
+
+let state = {
+  turn: 1, points: 20, selected: null, selectedTrans: null, ideaIdx: 6,
+  countries: {}, gameOver: false, routes: [], newsIdx: 0, zoom: 1, filter: 'all'
+};
+
+function init() {
+  Object.keys(MAP_PATHS).forEach(id => {
+    state.countries[id] = { influence: 0, censored: false, censorStr: 0 };
+  });
+  renderMap();
+  renderSidebar();
+  updateStats();
+  document.getElementById('spreadBtn').addEventListener('click', doSpread);
+  document.getElementById('nextTurnBtn').addEventListener('click', nextTurn);
+  setInterval(rotateNews, 4000);
+}
+
+function renderMap() {
+  const g = document.getElementById('countriesGroup');
+  g.innerHTML = Object.entries(MAP_PATHS).map(([id, path]) => {
+    const s = state.countries[id];
+    let cls = 'country-path';
+    if (s.censored) cls += ' censored';
+    else if (s.influence > 80) cls += ' inf-5';
+    else if (s.influence > 60) cls += ' inf-4';
+    else if (s.influence > 40) cls += ' inf-3';
+    else if (s.influence > 20) cls += ' inf-2';
+    else if (s.influence > 0) cls += ' inf-1';
+    if (state.selected === id) cls += ' selected';
+    return `<path class="${cls}" d="${path}" data-id="${id}" onclick="selectCountry('${id}')" onmouseenter="showTip(event,'${id}')" onmouseleave="hideTip()"/>`;
+  }).join('');
+  renderRoutes();
+}
+
+function renderRoutes() {
+  const g = document.getElementById('routesGroup');
+  g.innerHTML = state.routes.map(r => {
+    const p1 = getPathCenter(r.from);
+    const p2 = getPathCenter(r.to);
+    const mx = (p1.x + p2.x) / 2;
+    const my = Math.min(p1.y, p2.y) - 25;
+    return `<path class="route active" d="M${p1.x},${p1.y} Q${mx},${my} ${p2.x},${p2.y}"/>`;
+  }).join('');
+}
+
+function getPathCenter(id) {
+  const path = MAP_PATHS[id];
+  const nums = path.match(/[\d.]+/g).map(Number);
+  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+  for (let i = 0; i < nums.length; i += 2) {
+    minX = Math.min(minX, nums[i]); maxX = Math.max(maxX, nums[i]);
+    minY = Math.min(minY, nums[i+1]); maxY = Math.max(maxY, nums[i+1]);
+  }
+  return { x: (minX + maxX) / 2, y: (minY + maxY) / 2 };
+}
+
+function renderSidebar() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const filter = state.filter || 'all';
+  
+  const list = Object.entries(MAP_PATHS)
+    .filter(([id]) => {
+      const c = COUNTRIES_DATA[id];
+      const s = state.countries[id];
+      if (search && !c?.name?.toLowerCase().includes(search)) return false;
+      if (filter === 'infected' && s.influence === 0) return false;
+      if (filter === 'censored' && !s.censored) return false;
+      if (filter === 'clean' && s.influence > 0) return false;
+      if (['NA','SA','EU','AF','AS','OC'].includes(filter) && c?.region !== filter) return false;
+      return true;
+    })
+    .map(([id]) => {
+      const c = COUNTRIES_DATA[id] || { name: id, flag: '🏳️', pop: 0, region: '?' };
+      const s = state.countries[id];
+      return `<div class="region-item ${state.selected===id?'selected':''} ${s.censored?'censored':''}" onclick="selectCountry('${id}')">
+        <span class="region-flag">${c.flag}</span>
+        <div class="region-info">
+          <div class="region-name">${c.name}</div>
+          <div class="region-meta">${c.region} • ${(c.pop/1000).toFixed(1)}B</div>
+        </div>
+        <div class="region-bars">
+          <div class="region-bar"><div class="region-bar-fill inf" style="width:${s.influence}%"></div></div>
+          <div class="region-bar"><div class="region-bar-fill cen" style="width:${s.censorStr}%"></div></div>
+        </div>
+        <span class="region-pct inf">${Math.round(s.influence)}%</span>
+      </div>`;
+    }).join('');
+  document.getElementById('regionList').innerHTML = list;
+  
+  const filtered = document.querySelectorAll('.region-item').length;
+  document.getElementById('listCount').textContent = `${filtered}/${Object.keys(MAP_PATHS).length}`;
+  
+  document.getElementById('transGrid').innerHTML = TRANSMISSIONS.map(t => 
+    `<div class="trans-btn ${state.selectedTrans===t.id?'active':''} ${state.points<t.cost?'disabled':''}" onclick="selectTrans('${t.id}')">
+      <div class="trans-icon">${t.icon}</div>
+      <div class="trans-name">${t.name}</div>
+      <div class="trans-cost">${t.cost}</div>
+    </div>`
+  ).join('');
+}
+
+function setFilter(f) {
+  state.filter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  renderSidebar();
+}
+
+function selectCountry(id) { state.selected = id; renderMap(); renderSidebar(); updateBtn(); }
+function selectTrans(id) { state.selectedTrans = id; renderSidebar(); updateBtn(); }
+function updateBtn() {
+  const c = state.countries[state.selected];
+  const t = TRANSMISSIONS.find(x => x.id === state.selectedTrans);
+  document.getElementById('spreadBtn').disabled = !c || !t || c.censored || state.points < t.cost;
+}
+
+function doSpread() {
+  if (state.gameOver) return;
+  const id = state.selected;
+  const c = state.countries[id];
+  const t = TRANSMISSIONS.find(x => x.id === state.selectedTrans);
+  if (!c || !t || c.censored || state.points < t.cost) return;
+  
+  state.points -= t.cost;
+  const pop = COUNTRIES_DATA[id]?.pop || 10;
+  const res = 0.3 + Math.random() * 0.4;
+  let spread = t.base * (1 - res) * t.cw * (1 + pop / 500);
+  spread = Math.max(1, Math.round(spread));
+  c.influence = Math.min(100, c.influence + spread);
+  
+  state.routes.push({ from: 'US', to: id });
+  setTimeout(() => { state.routes.shift(); renderRoutes(); }, 2500);
+  
+  if (Math.random() < 0.25 + (c.influence / 100) * 0.35 && !c.censored) {
+    c.censorStr += 15 + Math.floor(Math.random() * 25);
+    if (c.censorStr >= 100) { c.censored = true; c.censorStr = 100; }
+  }
+  
+  const global = getGlobal();
+  if (global > 10) state.points += 2;
+  if (global > 30) state.points += 3;
+  
+  updateStats(); renderMap(); renderSidebar(); checkWin();
+}
+
+function nextTurn() {
+  if (state.gameOver) return;
+  state.turn++;
+  const global = getGlobal();
+  if (global > 20) {
+    const inc = Math.floor(global / 12);
+    Object.keys(state.countries).forEach(id => {
+      const c = state.countries[id];
+      if (!c.censored && c.influence > 5) {
+        c.censorStr = Math.min(100, c.censorStr + inc);
+        if (c.censorStr >= 100) { c.censored = true; c.censorStr = 100; }
+      }
+    });
+  }
+  Object.values(state.countries).forEach(c => {
+    if (c.influence > 0 && !c.censored) c.influence = Math.max(0, c.influence - 1);
+  });
+  state.points += 3 + Math.floor(global / 15);
+  updateStats(); renderMap(); renderSidebar(); checkWin();
+}
+
+function getGlobal() {
+  const total = Object.values(COUNTRIES_DATA).reduce((s, c) => s + (c.pop || 10), 0);
+  return Object.keys(state.countries).reduce((s, id) => s + (state.countries[id].influence / 100) * (COUNTRIES_DATA[id]?.pop || 10), 0) / total * 100;
+}
+
+function updateStats() {
+  const g = getGlobal();
+  const inf = Object.values(state.countries).filter(c => c.influence > 0).length;
+  const cen = Object.values(state.countries).filter(c => c.censored).length;
+  const free = Object.keys(state.countries).length - cen;
+  const avg = Object.values(state.countries).reduce((s, c) => s + c.censorStr, 0) / Object.keys(state.countries).length;
+  
+  document.getElementById('statInf').textContent = g.toFixed(1) + '%';
+  document.getElementById('infBar').style.width = g + '%';
+  document.getElementById('statCen').textContent = Math.round(avg) + '%';
+  document.getElementById('cenBar').style.width = avg + '%';
+  document.getElementById('statPts').textContent = state.points;
+  document.getElementById('ptsBar').style.width = Math.min(100, (state.points / 30) * 100) + '%';
+  document.getElementById('statTurn').textContent = state.turn;
+  document.getElementById('dashInf').textContent = inf;
+  document.getElementById('dashCen').textContent = cen;
+  document.getElementById('dashFree').textContent = free;
+  document.getElementById('mapInf').textContent = inf;
+  document.getElementById('mapCen').textContent = cen;
+  document.getElementById('mapRte').textContent = state.routes.length;
+}
+
+function checkWin() {
+  const g = getGlobal();
+  const cen = Object.values(state.countries).filter(c => c.censored).length;
+  if (g >= 50) endGame(true, `${IDEAS[state.ideaIdx].name} has achieved global saturation!`);
+  else if (cen >= 50) endGame(false, 'Too many countries censored. Your idea has been suppressed.');
+}
+
+function endGame(won, text) {
+  state.gameOver = true;
+  document.getElementById('gameOver').classList.remove('hidden');
+  document.getElementById('goIcon').className = 'go-icon ' + (won ? 'victory' : 'defeat');
+  document.getElementById('goIcon').textContent = won ? '🏆' : '🚫';
+  document.getElementById('goTitle').className = 'go-title ' + (won ? 'victory' : 'defeat');
+  document.getElementById('goTitle').textContent = won ? 'VICTORY' : 'DEFEAT';
+  document.getElementById('goText').textContent = text;
+  document.getElementById('goTurns').textContent = state.turn;
+  document.getElementById('goInfluence').textContent = getGlobal().toFixed(1) + '%';
+  document.getElementById('goCountries').textContent = Object.values(state.countries).filter(c => c.influence > 0).length;
+}
+
+function restartGame() {
+  state = { turn: 1, points: 20, selected: null, selectedTrans: null, ideaIdx: state.ideaIdx, countries: {}, gameOver: false, routes: [], newsIdx: 0, zoom: 1, filter: 'all' };
+  Object.keys(MAP_PATHS).forEach(id => { state.countries[id] = { influence: 0, censored: false, censorStr: 0 }; });
+  document.getElementById('gameOver').classList.add('hidden');
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.filter-btn').classList.add('active');
+  renderMap(); renderSidebar(); updateStats();
+}
+
+function cycleIdea() {
+  state.ideaIdx = (state.ideaIdx + 1) % IDEAS.length;
+  document.getElementById('ideaIcon').textContent = IDEAS[state.ideaIdx].icon;
+  document.getElementById('ideaName').textContent = IDEAS[state.ideaIdx].name;
+  document.getElementById('ideaType').textContent = IDEAS[state.ideaIdx].type;
+}
+
+function zoom(f) { state.zoom = Math.max(0.5, Math.min(2, state.zoom * f)); document.getElementById('mapSvg').style.transform = `scale(${state.zoom})`; }
+function resetView() { state.zoom = 1; document.getElementById('mapSvg').style.transform = 'scale(1)'; }
+function rotateNews() { if (!state.gameOver) document.getElementById('newsScroll').textContent = NEWS[state.newsIdx++ % NEWS.length]; }
+
+function showTip(e, id) {
+  const c = COUNTRIES_DATA[id] || { name: id, flag: '🏳️', pop: 0, res: 0.5, region: '?' };
+  const s = state.countries[id];
+  const tip = document.getElementById('tooltip');
+  tip.innerHTML = `<div class="tooltip-title">${c.flag} ${c.name}</div>
+    <div class="tooltip-row"><span class="tooltip-label">Influence</span><span class="tooltip-value green">${Math.round(s.influence)}%</span></div>
+    <div class="tooltip-row"><span class="tooltip-label">Resistance</span><span class="tooltip-value cyan">${(c.res*100).toFixed(0)}%</span></div>
+    <div class="tooltip-row"><span class="tooltip-label">Censorship</span><span class="tooltip-value red">${Math.round(s.censorStr)}%</span></div>
+    <div class="tooltip-row"><span class="tooltip-label">Population</span><span class="tooltip-value">${(c.pop/1000).toFixed(1)}B</span></div>
+    <div class="tooltip-status">${c.contested ? '⚠️ Contested territory' : '✓ Sovereign state'} • ${c.region}</div>`;
+  tip.style.left = (e.clientX + 15) + 'px';
+  tip.style.top = (e.clientY + 15) + 'px';
+  tip.style.display = 'block';
+}
+
+function hideTip() { document.getElementById('tooltip').style.display = 'none'; }
+
+const COUNTRIES_DATA = {
+  US:{name:'United States',flag:'🇺🇸',pop:331,res:0.25,region:'NA'},CA:{name:'Canada',flag:'🇨🇦',pop:38,res:0.3,region:'NA'},MX:{name:'Mexico',flag:'🇲🇽',pop:128,res:0.35,region:'NA'},
+  GT:{name:'Guatemala',flag:'🇬🇹',pop:18,res:0.4,region:'NA'},HN:{name:'Honduras',flag:'🇭🇳',pop:10,res:0.4,region:'NA'},SV:{name:'El Salvador',flag:'🇸🇻',pop:6.5,res:0.4,region:'NA'},
+  NI:{name:'Nicaragua',flag:'🇳🇮',pop:6.6,res:0.45,region:'NA'},CR:{name:'Costa Rica',flag:'🇨🇷',pop:5.1,res:0.3,region:'NA'},PA:{name:'Panama',flag:'🇵🇦',pop:4.3,res:0.35,region:'NA'},
+  CU:{name:'Cuba',flag:'🇨🇺',pop:11,res:0.6,region:'NA'},JM:{name:'Jamaica',flag:'🇯🇲',pop:3,res:0.35,region:'NA'},HT:{name:'Haiti',flag:'🇭🇹',pop:11,res:0.45,region:'NA'},DO:{name:'Dominican Republic',flag:'🇩🇴',pop:10,res:0.4,region:'NA'},
+  CO:{name:'Colombia',flag:'🇨🇴',pop:51,res:0.4,region:'SA'},VE:{name:'Venezuela',flag:'🇻🇪',pop:28,res:0.55,region:'SA'},GY:{name:'Guyana',flag:'🇬🇾',pop:0.8,res:0.4,region:'SA'},SR:{name:'Suriname',flag:'🇸🇷',pop:0.6,res:0.4,region:'SA'},
+  EC:{name:'Ecuador',flag:'🇪🇨',pop:18,res:0.4,region:'SA'},PE:{name:'Peru',flag:'🇵🇪',pop:33,res:0.45,region:'SA'},BR:{name:'Brazil',flag:'🇧🇷',pop:213,res:0.35,region:'SA'},BO:{name:'Bolivia',flag:'🇧🇴',pop:12,res:0.45,region:'SA'},
+  PY:{name:'Paraguay',flag:'🇵🇾',pop:7,res:0.4,region:'SA'},CL:{name:'Chile',flag:'🇨🇱',pop:19,res:0.3,region:'SA'},AR:{name:'Argentina',flag:'🇦🇷',pop:45,res:0.3,region:'SA'},UY:{name:'Uruguay',flag:'🇺🇾',pop:3.5,res:0.25,region:'SA'},
+  IS:{name:'Iceland',flag:'🇮🇸',pop:0.4,res:0.2,region:'EU'},NO:{name:'Norway',flag:'🇳🇴',pop:5.4,res:0.25,region:'EU'},SE:{name:'Sweden',flag:'🇸🇪',pop:10,res:0.25,region:'EU'},FI:{name:'Finland',flag:'🇫🇮',pop:5.5,res:0.3,region:'EU'},
+  DK:{name:'Denmark',flag:'🇩🇰',pop:5.8,res:0.25,region:'EU'},EE:{name:'Estonia',flag:'🇪🇪',pop:1.3,res:0.3,region:'EU'},LV:{name:'Latvia',flag:'🇱🇻',pop:1.9,res:0.35,region:'EU'},LT:{name:'Lithuania',flag:'🇱🇹',pop:2.8,res:0.35,region:'EU'},
+  PL:{name:'Poland',flag:'🇵🇱',pop:38,res:0.35,region:'EU'},DE:{name:'Germany',flag:'🇩🇪',pop:83,res:0.3,region:'EU'},NL:{name:'Netherlands',flag:'🇳🇱',pop:17,res:0.25,region:'EU'},BE:{name:'Belgium',flag:'🇧🇪',pop:11,res:0.25,region:'EU'},
+  FR:{name:'France',flag:'🇫🇷',pop:67,res:0.3,region:'EU'},CH:{name:'Switzerland',flag:'🇨🇭',pop:8.7,res:0.25,region:'EU'},AT:{name:'Austria',flag:'🇦🇹',pop:9,res:0.3,region:'EU'},GB:{name:'United Kingdom',flag:'🇬🇧',pop:67,res:0.3,region:'EU'},
+  IE:{name:'Ireland',flag:'🇮🇪',pop:5,res:0.25,region:'EU'},PT:{name:'Portugal',flag:'🇵🇹',pop:10,res:0.3,region:'EU'},ES:{name:'Spain',flag:'🇪🇸',pop:47,res:0.3,region:'EU'},IT:{name:'Italy',flag:'🇮🇹',pop:60,res:0.3,region:'EU'},
+  GR:{name:'Greece',flag:'🇬🇷',pop:10,res:0.35,region:'EU'},BG:{name:'Bulgaria',flag:'🇧🇬',pop:6.9,res:0.4,region:'EU'},RO:{name:'Romania',flag:'🇷🇴',pop:19,res:0.4,region:'EU'},HU:{name:'Hungary',flag:'🇭🇺',pop:10,res:0.4,region:'EU'},
+  CZ:{name:'Czech Republic',flag:'🇨🇿',pop:10,res:0.3,region:'EU'},SK:{name:'Slovakia',flag:'🇸🇰',pop:5.5,res:0.35,region:'EU'},SI:{name:'Slovenia',flag:'🇸🇮',pop:2.1,res:0.3,region:'EU'},HR:{name:'Croatia',flag:'🇭🇷',pop:4,res:0.35,region:'EU'},
+  BA:{name:'Bosnia & Herzegovina',flag:'🇧🇦',pop:3.3,res:0.45,region:'EU'},RS:{name:'Serbia',flag:'🇷🇸',pop:6.9,res:0.45,region:'EU'},ME:{name:'Montenegro',flag:'🇲🇪',pop:0.6,res:0.4,region:'EU'},MK:{name:'North Macedonia',flag:'🇲🇰',pop:2.1,res:0.4,region:'EU'},
+  AL:{name:'Albania',flag:'🇦🇱',pop:2.8,res:0.45,region:'EU'},UA:{name:'Ukraine',flag:'🇺🇦',pop:44,res:0.5,region:'EU'},BY:{name:'Belarus',flag:'🇧🇾',pop:9.4,res:0.7,region:'EU'},MD:{name:'Moldova',flag:'🇲🇩',pop:2.6,res:0.5,region:'EU'},
+  RU:{name:'Russia',flag:'🇷🇺',pop:144,res:0.7,region:'EU'},MA:{name:'Morocco',flag:'🇲🇦',pop:37,res:0.45,region:'AF'},DZ:{name:'Algeria',flag:'🇩🇿',pop:44,res:0.5,region:'AF'},TN:{name:'Tunisia',flag:'🇹🇳',pop:12,res:0.4,region:'AF'},
+  LY:{name:'Libya',flag:'🇱🇾',pop:7,res:0.6,region:'AF'},EG:{name:'Egypt',flag:'🇪🇬',pop:102,res:0.55,region:'AF'},MR:{name:'Mauritania',flag:'🇲🇷',pop:4.6,res:0.55,region:'AF'},ML:{name:'Mali',flag:'🇲🇱',pop:20,res:0.6,region:'AF'},
+  NE:{name:'Niger',flag:'🇳🇪',pop:24,res:0.65,region:'AF'},TD:{name:'Chad',flag:'🇹🇩',pop:16,res:0.65,region:'AF'},SD:{name:'Sudan',flag:'🇸🇩',pop:44,res:0.6,region:'AF'},SS:{name:'South Sudan',flag:'🇸🇸',pop:11,res:0.7,region:'AF'},
+  ET:{name:'Ethiopia',flag:'🇪🇹',pop:115,res:0.55,region:'AF'},SO:{name:'Somalia',flag:'🇸🇴',pop:16,res:0.7,region:'AF'},DJ:{name:'Djibouti',flag:'🇩🇯',pop:1,res:0.5,region:'AF'},ER:{name:'Eritrea',flag:'🇪🇷',pop:3.5,res:0.65,region:'AF'},
+  GN:{name:'Guinea',flag:'🇬🇳',pop:13,res:0.5,region:'AF'},SN:{name:'Senegal',flag:'🇸🇳',pop:17,res:0.45,region:'AF'},GM:{name:'Gambia',flag:'🇬🇲',pop:2.4,res:0.5,region:'AF'},GW:{name:'Guinea-Bissau',flag:'🇬🇼',pop:2,res:0.55,region:'AF'},
+  SL:{name:'Sierra Leone',flag:'🇸🇱',pop:8,res:0.55,region:'AF'},LR:{name:'Liberia',flag:'🇱🇷',pop:5,res:0.55,region:'AF'},CI:{name:"Côte d'Ivoire",flag:'🇨🇮',pop:26,res:0.5,region:'AF'},GH:{name:'Ghana',flag:'🇬🇭',pop:31,res:0.4,region:'AF'},
+  BF:{name:'Burkina Faso',flag:'🇧🇫',pop:21,res:0.6,region:'AF'},TG:{name:'Togo',flag:'🇹🇬',pop:8.3,res:0.5,region:'AF'},BJ:{name:'Benin',flag:'🇧🇯',pop:12,res:0.5,region:'AF'},NG:{name:'Nigeria',flag:'🇳🇬',pop:211,res:0.5,region:'AF'},
+  CM:{name:'Cameroon',flag:'🇨🇲',pop:27,res:0.55,region:'AF'},CF:{name:'Central African Republic',flag:'🇨🇫',pop:5,res:0.7,region:'AF'},GQ:{name:'Equatorial Guinea',flag:'🇬🇶',pop:1.4,res:0.55,region:'AF'},GA:{name:'Gabon',flag:'🇬🇦',pop:2.2,res:0.45,region:'AF'},
+  CG:{name:'Republic of Congo',flag:'🇨🇬',pop:5.5,res:0.55,region:'AF'},CD:{name:'DR Congo',flag:'🇨🇩',pop:90,res:0.65,region:'AF'},UG:{name:'Uganda',flag:'🇺🇬',pop:46,res:0.5,region:'AF'},KE:{name:'Kenya',flag:'🇰🇪',pop:54,res:0.45,region:'AF'},
+  RW:{name:'Rwanda',flag:'🇷🇼',pop:13,res:0.45,region:'AF'},BI:{name:'Burundi',flag:'🇧🇮',pop:12,res:0.55,region:'AF'},TZ:{name:'Tanzania',flag:'🇹🇿',pop:60,res:0.45,region:'AF'},AO:{name:'Angola',flag:'🇦🇴',pop:33,res:0.55,region:'AF'},
+  ZM:{name:'Zambia',flag:'🇿🇲',pop:19,res:0.5,region:'AF'},MW:{name:'Malawi',flag:'🇲🇼',pop:19,res:0.55,region:'AF'},MZ:{name:'Mozambique',flag:'🇲🇿',pop:31,res:0.55,region:'AF'},ZW:{name:'Zimbabwe',flag:'🇿🇼',pop:15,res:0.6,region:'AF'},
+  BW:{name:'Botswana',flag:'🇧🇼',pop:2.4,res:0.4,region:'AF'},NA:{name:'Namibia',flag:'🇳🇦',pop:2.5,res:0.45,region:'AF'},ZA:{name:'South Africa',flag:'🇿🇦',pop:60,res:0.35,region:'AF'},SZ:{name:'Eswatini',flag:'🇸🇿',pop:1.2,res:0.45,region:'AF'},
+  LS:{name:'Lesotho',flag:'🇱🇸',pop:2.1,res:0.45,region:'AF'},MG:{name:'Madagascar',flag:'🇲🇬',pop:28,res:0.5,region:'AF'},KM:{name:'Comoros',flag:'🇰🇲',pop:0.9,res:0.5,region:'AF'},MU:{name:'Mauritius',flag:'🇲🇺',pop:1.3,res:0.35,region:'AF'},SC:{name:'Seychelles',flag:'🇸🇨',pop:0.1,res:0.3,region:'AF'},
+  TR:{name:'Turkey',flag:'🇹🇷',pop:84,res:0.5,region:'AS'},SY:{name:'Syria',flag:'🇸🇾',pop:18,res:0.7,region:'AS'},IQ:{name:'Iraq',flag:'🇮🇶',pop:40,res:0.6,region:'AS'},IR:{name:'Iran',flag:'🇮🇷',pop:84,res:0.65,region:'AS'},
+  SA:{name:'Saudi Arabia',flag:'🇸🇦',pop:35,res:0.6,region:'AS'},YE:{name:'Yemen',flag:'🇾🇪',pop:30,res:0.7,region:'AS'},OM:{name:'Oman',flag:'🇴🇲',pop:5.1,res:0.5,region:'AS'},AE:{name:'UAE',flag:'🇦🇪',pop:10,res:0.45,region:'AS'},
+  QA:{name:'Qatar',flag:'🇶🇦',pop:2.9,res:0.4,region:'AS'},BH:{name:'Bahrain',flag:'🇧🇭',pop:1.5,res:0.4,region:'AS'},KW:{name:'Kuwait',flag:'🇰🇼',pop:4.3,res:0.45,region:'AS'},JO:{name:'Jordan',flag:'🇯🇴',pop:10,res:0.45,region:'AS'},
+  LB:{name:'Lebanon',flag:'🇱🇧',pop:6.8,res:0.5,region:'AS'},IL:{name:'Israel',flag:'🇮🇱',pop:9,res:0.4,region:'AS'},PS:{name:'Palestine',flag:'🇵🇸',pop:5,res:0.6,region:'AS'},
+  KZ:{name:'Kazakhstan',flag:'🇰🇿',pop:19,res:0.55,region:'AS'},UZ:{name:'Uzbekistan',flag:'🇺🇿',pop:34,res:0.6,region:'AS'},TM:{name:'Turkmenistan',flag:'🇹🇲',pop:6,res:0.7,region:'AS'},KG:{name:'Kyrgyzstan',flag:'🇰🇬',pop:6.6,res:0.55,region:'AS'},
+  TJ:{name:'Tajikistan',flag:'🇹🇯',pop:9.5,res:0.6,region:'AS'},AF:{name:'Afghanistan',flag:'🇦🇫',pop:39,res:0.75,region:'AS'},PK:{name:'Pakistan',flag:'🇵🇰',pop:220,res:0.55,region:'AS'},IN:{name:'India',flag:'🇮🇳',pop:1380,res:0.45,region:'AS'},
+  NP:{name:'Nepal',flag:'🇳🇵',pop:29,res:0.5,region:'AS'},BT:{name:'Bhutan',flag:'🇧🇹',pop:0.8,res:0.4,region:'AS'},BD:{name:'Bangladesh',flag:'🇧🇩',pop:165,res:0.45,region:'AS'},LK:{name:'Sri Lanka',flag:'🇱🇰',pop:22,res:0.45,region:'AS'},MV:{name:'Maldives',flag:'🇲🇻',pop:0.5,res:0.4,region:'AS'},
+  CN:{name:'China',flag:'🇨🇳',pop:1400,res:0.65,region:'AS'},MN:{name:'Mongolia',flag:'🇲🇳',pop:3.3,res:0.5,region:'AS'},KP:{name:'North Korea',flag:'🇰🇵',pop:26,res:0.85,region:'AS'},KR:{name:'South Korea',flag:'🇰🇷',pop:52,res:0.3,region:'AS'},
+  JP:{name:'Japan',flag:'🇯🇵',pop:126,res:0.3,region:'AS'},
+  MM:{name:'Myanmar',flag:'🇲🇲',pop:54,res:0.7,region:'AS'},TH:{name:'Thailand',flag:'🇹🇭',pop:70,res:0.45,region:'AS'},VN:{name:'Vietnam',flag:'🇻🇳',pop:97,res:0.5,region:'AS'},LA:{name:'Laos',flag:'🇱🇦',pop:7.3,res:0.55,region:'AS'},
+  KH:{name:'Cambodia',flag:'🇰🇭',pop:17,res:0.55,region:'AS'},MY:{name:'Malaysia',flag:'🇲🇾',pop:32,res:0.4,region:'AS'},SG:{name:'Singapore',flag:'🇸🇬',pop:5.7,res:0.3,region:'AS'},ID:{name:'Indonesia',flag:'🇮🇩',pop:274,res:0.45,region:'AS'},
+  PH:{name:'Philippines',flag:'🇵🇭',pop:110,res:0.45,region:'AS'},BN:{name:'Brunei',flag:'🇧🇳',pop:0.4,res:0.4,region:'AS'},TL:{name:'Timor-Leste',flag:'🇹🇱',pop:1.3,res:0.5,region:'AS'},
+  AU:{name:'Australia',flag:'🇦🇺',pop:26,res:0.3,region:'OC'},NZ:{name:'New Zealand',flag:'🇳🇿',pop:5,res:0.25,region:'OC'},PG:{name:'Papua New Guinea',flag:'🇵🇬',pop:9,res:0.5,region:'OC'},FJ:{name:'Fiji',flag:'🇫🇯',pop:0.9,res:0.35,region:'OC'},
+  SB:{name:'Solomon Islands',flag:'🇸🇧',pop:0.7,res:0.45,region:'OC'},VU:{name:'Vanuatu',flag:'🇻🇺',pop:0.3,res:0.4,region:'OC'},WS:{name:'Samoa',flag:'🇼🇸',pop:0.2,res:0.35,region:'OC'},TO:{name:'Tonga',flag:'🇹🇴',pop:0.1,res:0.35,region:'OC'},
+  KI:{name:'Kiribati',flag:'🇰🇮',pop:0.1,res:0.4,region:'OC'},MH:{name:'Marshall Islands',flag:'🇲🇭',pop:0.06,res:0.4,region:'OC'},FM:{name:'Micronesia',flag:'🇫🇲',pop:0.1,res:0.4,region:'OC'},PW:{name:'Palau',flag:'🇵🇼',pop:0.02,res:0.4,region:'OC'},NR:{name:'Nauru',flag:'🇳🇷',pop:0.01,res:0.4,region:'OC'}
+};
+
+init();
+</script>
+</body>
+</html>
